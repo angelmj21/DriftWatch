@@ -32,20 +32,25 @@
 /backend/tests/test_severity.py          @joshcodz
 
 /frontend/                               @ayushag56648
-/frontend/src/App.jsx                    @Gautham-0824
-/frontend/src/components/ErrorRateChart.jsx    @Gautham-0824
-/frontend/src/components/StatusBadge.jsx       @Gautham-0824
-/frontend/src/components/IncidentTimeline.jsx  @Gautham-0824
-/frontend/src/components/IncidentControl.jsx   @Gautham-0824
+/frontend/src/App.*                      @Gautham-0824
+/frontend/src/components/ErrorRateChart.*    @Gautham-0824
+/frontend/src/components/StatusBadge.*       @Gautham-0824
+/frontend/src/components/IncidentTimeline.*  @Gautham-0824
+/frontend/src/components/IncidentControl.*   @Gautham-0824
 
-/docs/architecture.md                    @ayushag56648
+/docs/architecture.*                     @ayushag56648
 /docs/deck/part-ayush.pptx               @ayushag56648
 /docs/deck/part-gautham.pptx             @Gautham-0824
 /docs/DriftWatch.pptx                    @Gautham-0824
 /README.md                               @Gautham-0824
+/Makefile                                @Gautham-0824
+/docs/deck/template.pptx                 @Gautham-0824
+/docs/DriftWatch.pdf                     @Gautham-0824
 
 # shared contracts: everyone reviews
 /docs/interfaces.md                      @joshcodz @angelmj21 @ayushag56648 @Gautham-0824
 /backend/requirements.txt                @joshcodz @angelmj21
 /.github/                                @angelmj21
 /CONTRIBUTING.md                         @angelmj21
+/backend/tests/test_scoring.py           @joshcodz
+/frontend/src/styles/tokens.css           @ayushag56648

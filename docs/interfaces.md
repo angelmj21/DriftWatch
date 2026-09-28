@@ -158,3 +158,20 @@ CORS must allow `http://localhost:5173`.
 ## Files on disk
 - Log file: `settings.log_path` - format exactly as section 4 of the plan.
 - Labels file: `settings.labels_path`, JSON lines: `{"id","type","services":[...],"start":"<iso>","end":"<iso>"}`. The engine never reads it; only `benchmarks/` does.
+
+## Benchmarks (Joshua: scoring.py, Angel: compare.py)
+```python
+# benchmarks/scoring.py (Joshua)
+@dataclass
+class LabeledIncident: id: str; type: str; services: list[str]; start: datetime; end: datetime
+def load_labels(path: str) -> list[LabeledIncident]
+@dataclass
+class Report:
+    incidents_total: int; detected: int; missed: int; false_alarms: int
+    detection_delays_s: list[float]; mean_delay_s: float | None
+    per_incident: list[dict]         # {id, type, detected, delay_s}
+def score(alert_times: list[datetime], labels: list[LabeledIncident], grace_s: float = 30.0) -> Report
+```
+`alert_times` = timestamps at which a detector **opened** an incident. An open inside `[start - grace_s, end + grace_s]` of a label detects it
+(delay = open time - label start, first open only, negative delay clamps to 0); further opens inside the same label are ignored; an open matching no label is a false alarm.
+Both detectors (fixed-threshold and DriftWatch) are scored by this same function.
