@@ -24,15 +24,29 @@ IAM_POLICY_NAME="${DW_IAM_POLICY_NAME:-DriftWatchPublisherPolicy}"
 ALERT_EMAIL="${DW_ALERT_EMAIL:-}"
 ALERT_SMS="${DW_ALERT_SMS:-}"
 
-[[ "$SNS_TOPIC_NAME" =~ ^[A-Za-z0-9_-]{1,256}$ ]] || fail "Invalid DW_SNS_TOPIC_NAME."
+if [[ ! "$SNS_TOPIC_NAME" =~ ^[A-Za-z0-9_-]+$ ]] || (( ${#SNS_TOPIC_NAME} > 256 )); then
+    fail "Invalid DW_SNS_TOPIC_NAME."
+fi
 [[ "$LOG_GROUP_NAME" =~ ^/[A-Za-z0-9._/-]+$ ]] || fail "Invalid DW_CW_LOG_GROUP."
-[[ "$METRIC_NAMESPACE" =~ ^[A-Za-z0-9._/-]{1,255}$ ]] || fail "Invalid DW_CW_METRIC_NAMESPACE."
+
+if [[ ! "$METRIC_NAMESPACE" =~ ^[A-Za-z0-9._/-]+$ ]] || (( ${#METRIC_NAMESPACE} > 255 )); then
+    fail "Invalid DW_CW_METRIC_NAMESPACE."
+fi
+
 [[ "$METRIC_NAMESPACE" == "DriftWatch" ]] || fail "DW_CW_METRIC_NAMESPACE must be DriftWatch."
-[[ "$IAM_USER_NAME" =~ ^[A-Za-z0-9+=,.@_-]{1,64}$ ]] || fail "Invalid DW_IAM_USER_NAME."
-[[ "$IAM_POLICY_NAME" =~ ^[A-Za-z0-9+=,.@_-]{1,128}$ ]] || fail "Invalid DW_IAM_POLICY_NAME."
+
+if [[ ! "$IAM_USER_NAME" =~ ^[A-Za-z0-9+=,.@_-]+$ ]] || (( ${#IAM_USER_NAME} > 64 )); then
+    fail "Invalid DW_IAM_USER_NAME."
+fi
+
+if [[ ! "$IAM_POLICY_NAME" =~ ^[A-Za-z0-9+=,.@_-]+$ ]] || (( ${#IAM_POLICY_NAME} > 128 )); then
+    fail "Invalid DW_IAM_POLICY_NAME."
+fi
+
 if [[ -n "$ALERT_EMAIL" && ! "$ALERT_EMAIL" =~ ^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$ ]]; then
     fail "DW_ALERT_EMAIL must be a valid email address."
 fi
+
 if [[ -n "$ALERT_SMS" && ! "$ALERT_SMS" =~ ^\+[1-9][0-9]{7,14}$ ]]; then
     fail "DW_ALERT_SMS must be an E.164 phone number, for example +14155550123."
 fi
@@ -40,7 +54,6 @@ fi
 awsr() {
     aws --region "$AWS_REGION" "$@"
 }
-
 identity="$(awsr sts get-caller-identity --output json)"
 account_id="$(jq -er '.Account' <<< "$identity")"
 caller_arn="$(jq -er '.Arn' <<< "$identity")"
@@ -49,18 +62,18 @@ partition="${caller_arn#arn:}"
 partition="${partition%%:*}"
 
 topic_arn="$(awsr sns create-topic --name "$SNS_TOPIC_NAME" --query TopicArn --output text)"
-
-if ! awsr logs describe-log-groups \
+if ! MSYS_NO_PATHCONV=1 awsr logs describe-log-groups \
     --log-group-name-prefix "$LOG_GROUP_NAME" \
     --query 'logGroups[].logGroupName' --output text |
     tr '\t' '\n' | grep -Fqx -- "$LOG_GROUP_NAME"; then
-    awsr logs create-log-group --log-group-name "$LOG_GROUP_NAME" >/dev/null
+    MSYS_NO_PATHCONV=1 awsr logs create-log-group --log-group-name "$LOG_GROUP_NAME" >/dev/null
 fi
-awsr logs put-retention-policy \
+MSYS_NO_PATHCONV=1 awsr logs put-retention-policy \
     --log-group-name "$LOG_GROUP_NAME" \
     --retention-in-days "$RETENTION_DAYS" >/dev/null
 
-policy_file="$(mktemp)"
+policy_file="$PWD/.driftwatch-policy.json"
+policy_file_aws="$(cygpath -w "$policy_file")"
 trap 'rm -f "$policy_file"' EXIT
 cat > "$policy_file" <<JSON
 {
@@ -117,13 +130,13 @@ if awsr iam get-policy --policy-arn "$policy_arn" >/dev/null 2>&1; then
                 awsr iam delete-policy-version --policy-arn "$policy_arn" \
                     --version-id "$oldest_version" >/dev/null
         fi
-        awsr iam create-policy-version --policy-arn "$policy_arn" \
-            --policy-document "file://$policy_file" --set-as-default >/dev/null
+       awsr iam create-policy-version --policy-arn "$policy_arn" \
+    --policy-document "file://$policy_file_aws" --set-as-default >/dev/null
     fi
 else
-    awsr iam create-policy --policy-name "$IAM_POLICY_NAME" \
-        --description 'DriftWatch alert publisher permissions' \
-        --policy-document "file://$policy_file" >/dev/null
+   awsr iam create-policy --policy-name "$IAM_POLICY_NAME" \
+    --description 'DriftWatch alert publisher permissions' \
+    --policy-document "file://$policy_file_aws" >/dev/null
 fi
 
 if ! awsr iam get-user --user-name "$IAM_USER_NAME" >/dev/null 2>&1; then
