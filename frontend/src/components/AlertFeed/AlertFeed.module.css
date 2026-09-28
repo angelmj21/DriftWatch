@@ -1,0 +1,14 @@
+.wrap {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px;
+  max-height: 420px;
+}
+.filters { display: flex; gap: 6px; }
+.filterButton {
+  background: transparent; border: 1px solid var(--border); color: var(--muted);
+  border-radius: 999px; padding: 4px 10px; font-size: 0.72rem; cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+}
+.filterButton.active { color: var(--text); border-color: var(--accent); }
+.list { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
+.empty { color: var(--muted); font-size: 0.85rem; padding: 16px 0; text-align: center; }
