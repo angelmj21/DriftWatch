@@ -1,0 +1,23 @@
+.wrap {
+  display: flex; flex-direction: column; gap: 12px;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px;
+}
+.buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.button {
+  background: var(--panel-alt); color: var(--text); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 14px; font-size: 0.85rem; cursor: pointer;
+  text-transform: capitalize;
+  transition: background var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+}
+.button:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); }
+.button:disabled { opacity: 0.5; cursor: not-allowed; }
+.select {
+  background: var(--panel-alt); color: var(--text); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 10px; font-size: 0.85rem; align-self: flex-start;
+}
+.error { color: var(--sev-critical); font-size: 0.8rem; }
+.down {
+  background: var(--panel); border: 1px solid var(--sev-critical); color: var(--sev-critical);
+  padding: 16px; border-radius: 12px; font-size: 0.85rem;
+}
