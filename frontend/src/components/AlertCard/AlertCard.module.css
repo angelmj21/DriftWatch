@@ -1,0 +1,14 @@
+.card {
+  background: var(--panel); border: 1px solid var(--border);
+  border-left: 3px solid var(--muted); border-radius: 8px; padding: 10px 12px; cursor: pointer;
+}
+.card.info { border-left-color: var(--sev-info); }
+.card.warn { border-left-color: var(--sev-warn); }
+.card.critical { border-left-color: var(--sev-critical); }
+.header { display: flex; gap: 8px; align-items: center; font-size: 0.85rem; }
+.severity { font-weight: 600; }
+.services { color: var(--muted); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.status { text-transform: uppercase; font-size: 0.68rem; color: var(--muted); }
+.meta { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+.explanation { margin-top: 8px; font-size: 0.8rem; border-top: 1px solid var(--border); padding-top: 8px; }
+.sigList { margin: 6px 0 0; padding-left: 16px; }
