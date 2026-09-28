@@ -1,0 +1,21 @@
+# secrets
+.env
+*.pem
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+# node
+node_modules/
+frontend/dist/
+# runtime output (generated live, never commit)
+*.log
+logs/
+labels*.jsonl
+.tailer_state*
+# os/editor
+.DS_Store
+.vscode/
+.idea/

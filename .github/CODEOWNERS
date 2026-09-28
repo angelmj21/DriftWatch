@@ -1,0 +1,51 @@
+# One owner per file/folder. GitHub auto-requests the owner as reviewer when someone
+# else touches their files - if you see that request, ask "why is my file in this PR?"
+# Owners: @joshcodz (Joshua)  @angelmj21 (Angel)  @ayushag56648 (Ayush)  @Gautham-0824 (Gautham)
+
+/generator/                              @joshcodz
+/backend/app/main.py                     @joshcodz
+/backend/app/ingest/                     @joshcodz
+/backend/app/engine/window.py            @joshcodz
+/backend/app/publishers/ws.py            @joshcodz
+/backend/app/api/                        @joshcodz
+
+/backend/app/config.py                   @angelmj21
+/backend/app/engine/baseline.py          @angelmj21
+/backend/app/engine/detector.py          @angelmj21
+/backend/app/engine/signature_tracker.py @angelmj21
+/backend/app/engine/severity.py          @angelmj21
+/backend/app/alerts/                     @angelmj21
+/backend/app/publishers/sns.py           @angelmj21
+/backend/app/publishers/cloudwatch.py    @angelmj21
+/infra/                                  @angelmj21
+/benchmarks/compare.py                   @angelmj21
+/benchmarks/scoring.py                   @joshcodz
+/docs/alert-schema.md                    @angelmj21
+
+# tests: cross-written so each person reviews the other's logic by writing tests for it
+/backend/tests/test_window.py            @angelmj21
+/backend/tests/test_parser.py            @angelmj21
+/backend/tests/test_tailer.py            @angelmj21
+/backend/tests/test_signature.py         @angelmj21
+/backend/tests/test_baseline.py          @joshcodz
+/backend/tests/test_detector.py          @joshcodz
+/backend/tests/test_severity.py          @joshcodz
+
+/frontend/                               @ayushag56648
+/frontend/src/App.jsx                    @Gautham-0824
+/frontend/src/components/ErrorRateChart.jsx    @Gautham-0824
+/frontend/src/components/StatusBadge.jsx       @Gautham-0824
+/frontend/src/components/IncidentTimeline.jsx  @Gautham-0824
+/frontend/src/components/IncidentControl.jsx   @Gautham-0824
+
+/docs/architecture.md                    @ayushag56648
+/docs/deck/part-ayush.pptx               @ayushag56648
+/docs/deck/part-gautham.pptx             @Gautham-0824
+/docs/DriftWatch.pptx                    @Gautham-0824
+/README.md                               @Gautham-0824
+
+# shared contracts: everyone reviews
+/docs/interfaces.md                      @joshcodz @angelmj21 @ayushag56648 @Gautham-0824
+/backend/requirements.txt                @joshcodz @angelmj21
+/.github/                                @angelmj21
+/CONTRIBUTING.md                         @angelmj21
