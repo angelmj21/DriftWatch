@@ -22,6 +22,7 @@ from backend.app.engine.window import SlidingWindow, WindowSnapshot
 from backend.app.ingest.parser import LogEvent, LogParser
 from backend.app.ingest.signature import make_signature
 from backend.app.ingest.tailer import LogTailer
+from backend.app.api.routes import router as api_router
 from backend.app.publishers.ws import router as ws_router, ws_publisher
 
 # Setup logging
@@ -182,20 +183,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount WebSocket router
+# Mount WebSocket and REST routers
 app.include_router(ws_router)
-
-
-@app.get("/health")
-async def health():
-    """Health endpoint for REST status reporting."""
-    uptime_s = (datetime.now(timezone.utc) - ws_publisher.start_time).total_seconds()
-    return {
-        "status": "ok",
-        "state": ws_publisher.state,
-        "lines_processed": ws_publisher.lines_processed,
-        "uptime_s": round(uptime_s, 2),
-    }
+app.include_router(api_router)
 
 
 if __name__ == "__main__":
