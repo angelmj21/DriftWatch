@@ -1,0 +1,16 @@
+.wrap {
+  display: flex; flex-direction: column; gap: 6px;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px;
+}
+.empty {
+  color: var(--muted); font-size: 0.85rem; padding: 24px 16px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+}
+.row { position: relative; height: 14px; background: var(--panel-alt); border-radius: 4px; }
+.bar { position: absolute; top: 0; bottom: 0; border-radius: 4px; min-width: 4px; }
+.bar.info { background: var(--sev-info); }
+.bar.warn { background: var(--sev-warn); }
+.bar.critical { background: var(--sev-critical); }
+.bar.open { animation: pulseBar 1.6s var(--ease-out) infinite; }
+@keyframes pulseBar { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
